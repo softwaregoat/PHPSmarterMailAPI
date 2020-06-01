@@ -14,30 +14,33 @@ class SmarterMail
     public $password;
     public function getToken()
     {
-        $curl = curl_init();
-         $domain =  $this->doamin;
-         $username = $this->username;
-         $password = $this->password;
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "{$domain}/api/v1/auth/authenticate-user",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS =>"{ \"username\": \"{$username}\", \"password\": \"{$password}\" }",
-            CURLOPT_HTTPHEADER => array(
-                "Content-Type: application/json"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-
-        curl_close($curl);
-        $json =json_decode($response, true);
-        return $json['accessToken'];
+        try {
+            $curl = curl_init();
+            $domain = $this->doamin;
+            $username = $this->username;
+            $password = $this->password;
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "{$domain}/api/v1/auth/authenticate-user",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => "{ \"username\": \"{$username}\", \"password\": \"{$password}\" }",
+                CURLOPT_HTTPHEADER => array(
+                    "Content-Type: application/json"
+                ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $json = json_decode($response, true);
+            return $json['accessToken'];
+        }
+        catch (Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     public function get_domains(){
@@ -48,7 +51,7 @@ class SmarterMail
             $domain = $this->doamin;
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "{$domain}api/v1/settings/sysadmin/domain-names",
+                CURLOPT_URL => "{$domain}/api/v1/settings/sysadmin/domain-names",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -66,9 +69,7 @@ class SmarterMail
 
             $json_r = json_decode($response, true);
             if ($json_r['success']) {
-                foreach ($json_r['data'] as $data) {
-                    $domains[] = $data['name'];
-                }
+                $domains = $json_r['data'];
             }
         }
         catch (Exception $ex) {
@@ -83,7 +84,7 @@ class SmarterMail
             $domain1 =  $this->doamin;
             $curl = curl_init();
             curl_setopt_array($curl, array(
-                CURLOPT_URL => "{$domain1}api/v1/settings/sysadmin/list-users/{$domain}",
+                CURLOPT_URL => "{$domain1}/api/v1/settings/sysadmin/list-users/{$domain}",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
@@ -100,7 +101,7 @@ class SmarterMail
             curl_close($curl);
 
             $json_r = json_decode($response, true);
-            if ( $json_r['message']){
+            if ( $json_r['success']){
                 foreach ($json_r['userData'] as $user)
                 {
                     $user_email[] = $user['emailAddress'];

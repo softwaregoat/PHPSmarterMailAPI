@@ -5,6 +5,10 @@ $domain = 'domain';
 $user = 'username';
 $pass = 'Pass';
 
+$domain = 'https://nos-mail.manageyour.host';
+$user = 'admin';
+$pass = 'T21mC5iUiUeeE1QiVja9FhDYdUOa';
+
 $smartMail = new SmarterMail();
 $smartMail->username = $user;
 $smartMail->password = $pass;
@@ -15,7 +19,7 @@ $domains = $smartMail->get_domains();
 echo 'domains:>';
 print_r($domains);
 
-$user_emails = $smartMail->get_users('test');
+$user_emails = $smartMail->get_users($domains[0]);
 echo 'users:>';
 print_r($user_emails);
 
