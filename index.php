@@ -17,12 +17,16 @@ $smartMail->doamin = $domain;
 
 $domains = $smartMail->get_domains();
 echo 'domains:>';
+echo '<pre>';
 print_r($domains);
-
+echo '</pre>';
 $user_emails = $smartMail->get_users($domains[0]);
 echo 'users:>';
+echo '<pre>';
 print_r($user_emails);
-
+echo '<pre>';
 $user_count = count($user_emails);
 echo 'user count:>';
+echo '<pre>';
 print_r($user_count);
+echo '<pre>';
