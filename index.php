@@ -5,10 +5,6 @@ $domain = 'domain';
 $user = 'username';
 $pass = 'Pass';
 
-$domain = 'https://nos-mail.manageyour.host';
-$user = 'admin';
-$pass = 'T21mC5iUiUeeE1QiVja9FhDYdUOa';
-
 $smartMail = new SmarterMail();
 $smartMail->username = $user;
 $smartMail->password = $pass;
